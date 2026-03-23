@@ -1,0 +1,11 @@
+# Archivos con credenciales y accesos — NUNCA commitear
+docs/accesos.md
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Editores
+.vscode/
+.idea/
+*.swp
