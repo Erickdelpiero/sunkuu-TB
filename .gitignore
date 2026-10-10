@@ -1,0 +1,28 @@
+# Credenciales y accesos — NUNCA commitear
+docs/sunkuu-TB-accesos.md
+docs/accesos.md
+.env
+
+# Trabajo local de widgets (fuente de verdad: ../sunkuu-tb-config)
+widgets/work/
+widgets/apply*/
+widgets/rollback*/
+widgets/patched/
+widgets/dev/
+
+# Derivados regenerables (qa/scripts/extract_widgets.py)
+qa/extract/
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Editores
+.vscode/
+.idea/
+*.swp
