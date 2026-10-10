@@ -1,0 +1,65 @@
+/* ============================================================
+   Sunkuu 360 — Marca blanca de login
+   Aplica a: login (.tb-login-content) y a las páginas de
+   contraseña (.tb-password-card): crear, solicitar y restablecer.
+   Requiere: "Primer plano oscuro" ACTIVADO y acento #00EBC8.
+   ============================================================ */
+
+/* Fondo de página */
+.tb-login-content,
+.tb-password-content {
+  background-color: #EBF0F7 !important;
+}
+
+/* Tarjeta blanca (anula el color del tema tb-dark) */
+.tb-login-content .mat-mdc-card,
+.tb-password-card.mat-mdc-card {
+  --mdc-elevated-card-container-color: #ffffff !important;
+  background-color: #ffffff !important;
+  border-radius: 16px !important;
+  box-shadow: 0 4px 32px rgba(0, 0, 140, 0.14) !important;
+}
+
+/* Textos y título de la tarjeta */
+.tb-login-content .mat-mdc-card-content,
+.tb-password-card .mat-mdc-card-content,
+.tb-password-card .mat-mdc-card-title {
+  color: #1a1a3e !important;
+}
+
+/* Campos: borde, foco, texto y etiquetas */
+.tb-login-content .mat-mdc-form-field,
+.tb-password-card .mat-mdc-form-field {
+  --mdc-outlined-text-field-outline-color: #c8d0e8 !important;
+  --mdc-outlined-text-field-hover-outline-color: #8a94b8 !important;
+  --mdc-outlined-text-field-focus-outline-color: #00008c !important;
+  --mdc-outlined-text-field-input-text-color: #1a1a3e !important;
+  --mdc-outlined-text-field-label-text-color: #5a6080 !important;
+  --mdc-outlined-text-field-hover-label-text-color: #5a6080 !important;
+  --mdc-outlined-text-field-focus-label-text-color: #00008c !important;
+  --mdc-outlined-text-field-caret-color: #00008c !important;
+}
+
+/* Botón principal: Sign in / Crear contraseña / Solicitar restablecimiento */
+.tb-login-content button.tb-action-button,
+.tb-password-card button.mat-mdc-unelevated-button.mat-accent {
+  --mdc-filled-button-container-color: #00ebc8 !important;
+  --mdc-filled-button-label-text-color: #00008c !important;
+  background-color: #00ebc8 !important;
+  color: #00008c !important;
+  font-weight: 700 !important;
+  border-radius: 8px !important;
+}
+
+/* Botón secundario: Cancelar */
+.tb-password-card .mat-mdc-button.mat-unthemed {
+  --mdc-text-button-label-text-color: #00008c !important;
+  color: #00008c !important;
+  font-weight: 600 !important;
+}
+
+/* Enlaces (¿Olvidaste tu contraseña?) */
+.tb-login-content .forgot-password a,
+.tb-login-content a {
+  color: #00008c !important;
+}
