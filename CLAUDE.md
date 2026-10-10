@@ -37,6 +37,13 @@ la documentación de este repo sin verificarla contra `../sunkuu-tb-config`.
 6. Fila en `CHANGELOG.md` con el ID del cambio y el hash de `sunkuu-tb-config` (automático o manual),
    y commit en sunkuu-TB con el mismo ID.
 
+### Auto-commit (comportamiento observado)
+- Se dispara al guardar cualquier entidad de los tipos activados (incluidos widgets y dashboards),
+  por cualquier usuario del tenant (GONEX o Romel).
+- El autor del commit es el usuario que guardó; el mensaje es `auto-commit at <fecha UTC>`.
+- No se dispara por telemetría.
+- Pendiente de confirmar: si las eliminaciones generan commit.
+
 ## Principios técnicos
 - Zona horaria **America/Lima (UTC−5) explícita** en todo cálculo de día o mes.
 - Los parámetros de negocio (umbrales, tarifas, destinatarios) los configura Sunkuu desde la
@@ -45,8 +52,10 @@ la documentación de este repo sin verificarla contra `../sunkuu-tb-config`.
 ## Entidades de prueba (no son clientes)
 "TG Hotel Prueba", "TG Prueba", "TG Gonex" y cualquier nombre que contenga "Prueba", "Erick" o "Gonex".
 
-**Advertencia F16:** el widget/dashboard DEV (copia `afc86b80…`) lee y PUEDE ESCRIBIR atributos en el
-dispositivo de producción TG Pumarinri. No usar su función de guardado hasta que se corrija.
+**Copia DEV (F16):** el widget "Sunkuu — Template 3EM DEV" (`afc86b80…`), en el dashboard TG PRUEBA,
+lee el dispositivo de producción TG GOCTA (`c636fa00…`). Su guardado de atributos está bloqueado por
+el bloque `// DEV-ONLY (FEAT-01)` en `renderCfgPanel`: mantenerlo en toda versión DEV y **nunca
+copiarlo a producción**.
 
 ## Prioridad
 1. Lo que reporta Romel.
