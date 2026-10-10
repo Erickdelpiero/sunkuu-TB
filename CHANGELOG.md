@@ -1,0 +1,18 @@
+# CHANGELOG — Sunkuu 360
+
+Registro de cambios en producción (ThingsBoard PE 4.3, 360.sunkuu.com) y su trazabilidad entre repos.
+Fuente de verdad de la configuración: `../sunkuu-tb-config` (Version Control de ThingsBoard).
+Fechas en hora de Lima (UTC−5).
+
+| Fecha | ID | Cambio | Componentes | Commit sunkuu-tb-config | Commit sunkuu-TB | Estado |
+|---|---|---|---|---|---|---|
+| 2026-10-06 | BR-01 | Logo real de Sunkuu en los 4 widgets (HTML/CSS; imagen pública "LOGO SUNKUU BLANCO.png" de la galería). Aprobado por Romel. | widget_type ×4 | — (previo al Version Control; incluido en `d58d79a`) | `5620098` (activo del logo) | Aplicado |
+| 2026-10-06 | BR-02 | Contraste del texto "360" junto al logo: `rgba(255,255,255,.8)`. | widget_type ×4 | — (previo al Version Control; incluido en `d58d79a`) | — | Aplicado |
+| 2026-10-06 | VC-01 | Version Control de ThingsBoard configurado: repo `sunkuu-tb-config`, baseline "baseline 2026-10-06 post-logo", sin credenciales de dispositivos. Los widgets se agruparon en el bundle "Sunkuu" para versionarlos. El primer repo se borró y se recreó porque exportó credenciales de dispositivos (origen de la regla de desmarcar "credenciales"). Ejecutado por GONEX (Erick) con la cuenta de Romel. | Plataforma, widgets_bundle | `d58d79a` | — | Aplicado |
+| 2026-10-06 | ERR-01 | Errata "Actualizado hace hace" en Template 3EM (solo HTML). Ejecutado por GONEX (Erick) con la cuenta de Romel. | widget_type 3EM | `7bb4384` | — | Aplicado |
+| 2026-10-06 | QA-01 | Revisión técnica QA completa (F01–F52): `docs/qa/2026-10-revision-tecnica.md` y scripts de validación en `qa/scripts/`. | Docs | `7bb4384` (commit analizado) | `0efe2fb` | Entregado |
+| 2026-10-09 | F53 | Etiquetas y textos invisibles en las páginas de crear/solicitar/restablecer contraseña (reportado por Romel). Causa: "Primer plano oscuro" desactivado y CSS acotado solo a `.tb-login-content`. Solución: Primer plano oscuro activado, paleta de acento `#00EBC8`, CSS avanzado ampliado a `.tb-password-card`. | Marca blanca (login) | — (el Version Control no exporta la marca blanca; ver `config/white-labeling/`) | `a64a7a9`, `7f2a9dd` | Corregido y validado |
+| 2026-10-09 | ADM-01 | Alta de un usuario administrador del tenant propio de GONEX, para que las versiones identifiquen al autor real. | Usuarios del tenant | — | — | Aplicado |
+| 2026-10-09 | VC-02 | Auto-commit activado en ThingsBoard + versión manual "chore: estado tras alta de customer y usuarios por Romel". Primera versión con el usuario GONEX. | Plataforma | `0b0561a` | — | Aplicado |
+
+Nota: el commit `ed00205` de sunkuu-TB ("chore: instantánea de widgets previa al logo (2026-10-06)") contiene los `widgets/*.json` de la raíz **antes** de BR-01/BR-02; no refleja producción.
