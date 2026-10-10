@@ -33,7 +33,7 @@ Los widgets funcionan y la ingesta MQTT → TB es coherente (keys y unidades cor
 4. **Falsa sensación de monitoreo**: el estado "En línea" es fijo, las notificaciones están apagadas y los umbrales son incoherentes (F10–F12, F21).
 5. **Aislamiento entre clientes débil**: el JS de Flota lleva emails y UUIDs de todos los clientes, hay fallos *fail-open* por rol, clientes de prueba con dashboards de producción y MQTT anónimo (F14–F18).
 
-**Conteo:** 8 críticos · 12 altos · 24 medios · 8 cosméticos (52 hallazgos).
+**Conteo:** 8 críticos · 13 altos · 24 medios · 8 cosméticos (53 hallazgos).
 
 ---
 
@@ -176,7 +176,7 @@ Coherencia:
 | F50 | M | F, A | 3EM, FLOTA | 3EM JS L282, L284, L311; FLOTA JS L757, L783 | Un **reset o salto del contador** queda oculto con `Math.max(0,…)`: el día muestra 0 kWh o un valor parcial sin aviso, y el promedio de 30 días descarta ese día. | `D.energyToday=Math.max(0,(current-baseline)/1000);` | Sí — clientes | Sumar solo deltas positivos tramo a tramo (como `sunkuu_csv.counter_delta`) y avisar del reset. | Bajo | **Requiere validación con datos** (buscar caídas del contador en un export Raw). |
 | F51 | Co | H | FLOTA, EXP, 3EM | FLOTA JS L87–93; EXP JS L56, L99, L142, L185, L215; 3EM JS L1104–1108 | `status:'online'` está fijo en Flota y Exportación: el punto verde no refleja el estado. Los puntos `.idd-dot` del desplegable de 3EM nunca se crean (código muerto en L1104–1108). | `status:'online'` | Sí | Derivar el estado de `lastTs` y el atributo `active`. | Nulo | Inspección. |
 | F52 | M | A, H | 3EM, PISC, FLOTA | 3EM HTML L293; PISC HTML L282, JS L531; FLOTA HTML L66 | "Tarifa BT5B" está fijo en el texto y el costo es `kWh × tarifa`, **sin cargo fijo, alumbrado público ni IGV**. Se presenta como "Costo estimado" o "≈ S/." | `Tarifa BT5B · S/. <span id="cc-tar">` | Sí — clientes | Decidir si se muestra solo "costo de energía" o el costo con cargos (D2); leer el nombre de la tarifa de un atributo. | Bajo | Contrastar con un recibo real. **Requiere validación con datos.** |
-| F53 | Alto | H | Marca blanca (login) | `config/white-labeling/login-advanced.css`, `config/white-labeling/login-settings.md` | Etiquetas y textos invisibles en las páginas de crear, solicitar y restablecer contraseña (reportado por Romel, 2026-10-09). Causa: "Primer plano oscuro" desactivado y CSS avanzado acotado solo a `.tb-login-content`. | El CSS no tenía selectores para `.tb-password-card` | Sí — clientes | Primer plano oscuro activado, acento `#00EBC8`, CSS avanzado ampliado a `.tb-password-card` / `.tb-password-content`. | Bajo | **Corregido y validado** (crear, solicitar y restablecer contraseña verificadas). La marca blanca no la exporta el Version Control: vive en `config/white-labeling/`. |
+| F53 | A | H | Marca blanca (login) | `config/white-labeling/login-advanced.css`, `config/white-labeling/login-settings.md` | Etiquetas y textos invisibles en las páginas de crear, solicitar y restablecer contraseña (reportado por Romel, 2026-10-09). Causa: "Primer plano oscuro" desactivado y CSS avanzado acotado solo a `.tb-login-content`. | El CSS no tenía selectores para `.tb-password-card` | Sí — clientes | Primer plano oscuro activado, acento `#00EBC8`, CSS avanzado ampliado a `.tb-password-card` / `.tb-password-content`. | Bajo | **Corregido y validado** (crear, solicitar y restablecer contraseña verificadas). La marca blanca no la exporta el Version Control: vive en `config/white-labeling/`. |
 
 ---
 
