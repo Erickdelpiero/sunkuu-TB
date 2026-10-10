@@ -14,5 +14,10 @@ Fechas en hora de Lima (UTC−5).
 | 2026-10-09 | F53 | Etiquetas y textos invisibles en las páginas de crear/solicitar/restablecer contraseña (reportado por Romel). Causa: "Primer plano oscuro" desactivado y CSS acotado solo a `.tb-login-content`. Solución: Primer plano oscuro activado, paleta de acento `#00EBC8`, CSS avanzado ampliado a `.tb-password-card`. | Marca blanca (login) | — (el Version Control no exporta la marca blanca; ver `config/white-labeling/`) | `a64a7a9`, `7f2a9dd` | Corregido y validado |
 | 2026-10-09 | ADM-01 | Alta de un usuario administrador del tenant propio de GONEX, para que las versiones identifiquen al autor real. | Usuarios del tenant | — | — | Aplicado |
 | 2026-10-09 | VC-02 | Auto-commit activado en ThingsBoard + versión manual "chore: estado tras alta de customer y usuarios por Romel". Primera versión con el usuario GONEX. | Plataforma | `0b0561a` | — | Aplicado |
+| 2026-10-09/10 | FEAT-01 | Curva de demanda del Template 3EM (pedido por Romel): vistas 4h · 8h · Hoy · Ayer (se retira 24h) con medianoche de Lima explícita, refresco cada 5 min y "Total ayer" superpuesto en Hoy; legibilidad (resolución 5/10/15 min, suavizado monotónico, huecos como tramos tenues); selector Total · Fases · Todo (por defecto Total, recordado por navegador). Antes, la copia DEV se sincronizó con producción y su guardado de atributos quedó bloqueado (bloque DEV-ONLY, mitiga F16 en DEV). | widget_type 3EM y 3EM DEV, dashboard TG PRUEBA | DEV: `d56c6c4` (sync + bloqueo), `adaa5d1`/`2a7732d` (dashboard TG PRUEBA → TG GOCTA), `077a048`, `12af18f`, `09fe822`. Producción: `fd69cad` | — | Aplicado |
 
 Nota: el commit `ed00205` de sunkuu-TB ("chore: instantánea de widgets previa al logo (2026-10-06)") contiene los `widgets/*.json` de la raíz **antes** de BR-01/BR-02; no refleja producción.
+
+## Mejoras opcionales
+
+- FEAT-01: Fase B y Fase C usan tonos azules parecidos; el ámbar no sirve porque ya es el color de advertencia del widget. Ajustar solo si Romel lo pide.
