@@ -42,7 +42,24 @@ la documentación de este repo sin verificarla contra `../sunkuu-tb-config`.
   por cualquier usuario del tenant (GONEX o Romel).
 - El autor del commit es el usuario que guardó; el mensaje es `auto-commit at <fecha UTC>`.
 - No se dispara por telemetría.
-- Pendiente de confirmar: si las eliminaciones generan commit.
+- **No registra eliminaciones, cambios de propietario ni cambios de grupos** (confirmado el
+  2026-10-11: el repo siguió mostrando entidades eliminadas y el propietario anterior de `717ae5e0`).
+  Después de cada alta, baja o cambio de propietario se crea una **versión manual con estrategia
+  Overwrite y todos los tipos de entidad** (verificado en `71f1603`: eliminó 43 entidades y movió
+  `717ae5e0` a `hierarchy/` de su customer).
+
+## Altas, bajas y cambios de propietario (reglas confirmadas)
+- Antes de eliminar o reemplazar un dashboard o un dispositivo, buscar qué lo referencia: plantillas
+  de informe, eventos del planificador, `NAV` y arrays de los widgets, grupos.
+- Nunca eliminar un dispositivo con historial. Para moverlo a otro customer se usa "Cambiar
+  propietario" (conserva UUID, telemetría y atributos). Eliminarlo borra su telemetría
+  (housekeeper, PE ≥ 3.7).
+- Licencia ThingsBoard PE plan Pilot: **100 dispositivos, 100 activos y 1 instancia de producción**.
+  Cada alta debe revisar el cupo: el registro de instalaciones (Nivel 1) usa 1 activo por
+  instalación, y los dispositivos espejo de un tenant de desarrollo cuentan para el límite de
+  dispositivos.
+- Entorno de desarrollo (decisión tomada, por implementar): un tenant separado de GONEX en la misma
+  instancia. Hasta entonces, los parches pequeños se aplican directo en producción con rollback.
 
 ## Principios técnicos
 - Zona horaria **America/Lima (UTC−5) explícita** en todo cálculo de día o mes.
