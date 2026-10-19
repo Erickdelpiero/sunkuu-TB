@@ -84,6 +84,7 @@ ThingsBoard no exporta esto a `../sunkuu-tb-config`; lo que GONEX cambie aquí d
 | Configuración | Documentado en `config/` |
 |---|---|
 | Marca blanca de login | `config/white-labeling/` (`login-settings.md`, `login-advanced.css`) |
+| Destinatarios y plantilla de notificación de los planificadores de informes (el export trae `targets: null`) | `config/informes/README.md` |
 | Marca blanca general | Pendiente de capturar por Erick |
 | Plantillas de correo | Pendiente de capturar por Erick |
 | Traducción personalizada | Pendiente de capturar por Erick |
@@ -91,6 +92,8 @@ ThingsBoard no exporta esto a `../sunkuu-tb-config`; lo que GONEX cambie aquí d
 | Configuración de seguridad | Pendiente de capturar por Erick |
 | Servidor de correo | Pendiente de capturar por Erick |
 | Galería de imágenes | Parcial: solo `assets/brand/LOGO_SUNKUU_BLANCO.json`; resto pendiente de capturar por Erick |
+
+Lección: el auto-commit no captura `notification_target`; tras crear o editar targets, hacer una versión manual (tipo `notification_target`) y `git pull`.
 
 ## Herramientas
 - `qa/scripts/extract_widgets.py`: extrae los campos de los widgets a `qa/extract/` (ignorado).
