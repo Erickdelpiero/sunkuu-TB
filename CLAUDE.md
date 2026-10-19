@@ -95,6 +95,8 @@ ThingsBoard no exporta esto a `../sunkuu-tb-config`; lo que GONEX cambie aquí d
 
 Lección: el auto-commit no captura `notification_target`; tras crear o editar targets, hacer una versión manual (tipo `notification_target`) y `git pull`.
 
+Lección: el auto-commit no captura cambios de atributos de dispositivos; tras editarlos, versión manual (confirmado en FIX-01, `fcedb2d`).
+
 ## Herramientas
 - `qa/scripts/extract_widgets.py`: extrae los campos de los widgets a `qa/extract/` (ignorado).
 - `widgets/*.json` en la raíz: instantánea histórica **previa al logo** (commit `ed00205`); no son la
