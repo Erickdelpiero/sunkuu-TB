@@ -37,6 +37,7 @@ Lección (FIX-01): el auto-commit no captura cambios de atributos de dispositivo
 | Exportación: renombrar la etiqueta "Energía Total" a "Contador de energía del medidor (Wh)" (la columna es el contador acumulado, no la energía del día). | GONEX | — |
 | Exportación Raw: limitar el rango o avisar cuando una variable alcance 50 000 puntos (hoy el corte es silencioso; ~35 días a 1 muestra/min). No se amplía el rango. | GONEX | — |
 | Piscina: evaluar el estado de conexión `<id>/online` del Shelly (hoy la integración MQTT no se suscribe a ese tópico), junto con la Opción A del proyecto (template Shelly Pro EM-50), que también lo necesita. | GONEX | — |
+| FIX-02 (3EM y Piscina, un único apply por widget al final de la Opción B): (a) gráficas de día 00–24 h Lima con selector de fecha — Cortesía (la del selector ya acordada, absorbida en A); (b) contraste de los desplegables — Cortesía; (c) panel de parámetros con `mostrar_parametros` — Correctivo F45 + Cortesía (el interruptor); (d) NAV leyendo el registro de instalaciones — Evolutivo (B). Alcance en `docs/arquitectura/2026-10-19-diseno-B.md` §7. | GONEX | — |
 | (Omisible, para el próximo cambio de widgets) Panel de parámetros único (3EM, Piscina y Pro EM-50) cuyas cifras alimenten las alarmas reales (umbrales dinámicos en el perfil leyendo los mismos atributos); incluye `estado_alerta_h`/`estado_desconexion_h`. Relacionado con F11, F12 e I-07. | GONEX | — |
 
 ## Valor entregado
