@@ -12,6 +12,7 @@ Salida (por widget, carpeta = fqn):
     qa/extract/<fqn>/templateHtml.html
     qa/extract/<fqn>/templateCss.css
     qa/extract/<fqn>/controllerScript.js
+    qa/extract/<fqn>/controllerScriptModules.json (si el editor JS declara módulos: alias → recurso)
     qa/extract/<fqn>/settingsForm.json, defaultConfig.json, resources.json, ...
     qa/extract/<fqn>/meta.json        (id, nombre, fqn, archivo fuente, commit)
     qa/extract/MANIFEST.json          (commit analizado + lista de widgets)
@@ -43,7 +44,7 @@ def git_head(config_dir):
 def is_dev(entity):
     name = (entity.get("name") or "").upper()
     fqn = (entity.get("fqn") or "").lower()
-    return name.endswith(" DEV") or fqn.endswith("_dev")
+    return name.endswith(" DEV") or name.startswith("DEV ") or fqn.endswith("_dev") or fqn.startswith("dev_")
 
 
 def write(path, content):
@@ -85,6 +86,9 @@ def main():
         desc = entity.get("descriptor") or {}
         for key, value in desc.items():
             if key in TEXT_FIELDS:
+                if isinstance(value, dict):   # con módulos: {"body": …, "modules": {alias: "tb-resource;…"}}
+                    write(os.path.join(wdir, key + "Modules.json"), json.dumps(value.get("modules"), indent=2, ensure_ascii=False))
+                    value = value.get("body")
                 write(os.path.join(wdir, TEXT_FIELDS[key]), value or "")
             elif isinstance(value, (dict, list)):
                 write(os.path.join(wdir, key + ".json"), json.dumps(value, indent=2, ensure_ascii=False))
