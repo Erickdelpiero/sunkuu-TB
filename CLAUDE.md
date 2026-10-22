@@ -99,6 +99,8 @@ Lección: el auto-commit no captura cambios de atributos de dispositivos; tras e
 
 Lección: un recurso JS de tipo **Módulo** (Biblioteca JavaScript) no se declara en la pestaña "Resources" del widget: ahí se pide sin token y responde 401. Se declara en el editor JavaScript (ícono de módulos, con alias; en B: `registroMod`) y queda en `controllerScript.modules` como `tb-resource;<link>`. Encontrado en la documentación oficial (notas de la versión 3.9) tras el 401 de B-04.
 
+Lección: los atributos del registro de instalaciones (`tipo`, `dashboard_id`, `dispositivos`, …) se escriben por API o con el formulario de B-03, nunca a mano en la UI. En B-04 la escritura manual dejó `dashboard_id` como texto (`D_QA1`…) y una clave `` tipo` ``; se corrigió por API (estado correcto en `f120230`).
+
 ## Herramientas
 - `qa/scripts/extract_widgets.py`: extrae los campos de los widgets a `qa/extract/` (ignorado).
 - `widgets/*.json` en la raíz: instantánea histórica **previa al logo** (commit `ed00205`); no son la
