@@ -97,6 +97,8 @@ Lección: el auto-commit no captura `notification_target`; tras crear o editar t
 
 Lección: el auto-commit no captura cambios de atributos de dispositivos; tras editarlos, versión manual (confirmado en FIX-01, `fcedb2d`).
 
+Lección: un recurso JS de tipo **Módulo** (Biblioteca JavaScript) no se declara en la pestaña "Resources" del widget: ahí se pide sin token y responde 401. Se declara en el editor JavaScript (ícono de módulos, con alias; en B: `registroMod`) y queda en `controllerScript.modules` como `tb-resource;<link>`. Encontrado en la documentación oficial (notas de la versión 3.9) tras el 401 de B-04.
+
 ## Herramientas
 - `qa/scripts/extract_widgets.py`: extrae los campos de los widgets a `qa/extract/` (ignorado).
 - `widgets/*.json` en la raíz: instantánea histórica **previa al logo** (commit `ed00205`); no son la
