@@ -1,6 +1,6 @@
 # SEC-02 — Historial de telemetría legible entre customers
 
-Fecha: 2026-10-26 · Base: `../sunkuu-tb-config` `8a1f930` (solo lectura) · **Abierto. Nada aplicado.**
+Fecha: 2026-10-26 · Base: `../sunkuu-tb-config` `8a1f930` (solo lectura) · **Abierto. Nada aplicado.** ThingsBoard confirmó el fallo (2026-10-26); se cierra con el upgrade a 4.3.1.8 PE (UPG-01, `docs/qa/2026-10-26-UPG-01-upgrade-4.3.1.8.md`).
 Origen: V17 de B-05 (`docs/qa/2026-10-25-B-05.md` §9) y su investigación (`docs/qa/2026-10-26-V17-permisos-curl.md`).
 
 ## 1. Hallazgo (verificado por Erick el 2026-10-26)
@@ -21,6 +21,10 @@ Un usuario de customer puede leer el **historial** de telemetría de dispositivo
 Fuentes: https://github.com/thingsboard/thingsboard/pull/16134 · https://thingsboard.io/docs/pe/releases/releases-table/v4-3-x/ · https://github.com/thingsboard/thingsboard/pull/16407
 
 **Causa probable (Erick, 2026-10-26):** la del PR #16134. `AccessValidator` pasa la denegación a `onSuccess` y `DefaultTbTelemetryService.getTimeseries` la ignora; `lts-4.3` está afectado. Según Erick, la corrección está en el **PR #16308**, fusionado en `lts-4.4` el 2026-10-14. No aparece en las notas de 4.3.x hasta 4.3.1.7. Falta confirmar en qué versión publicada de 4.4.x entra (§9).
+
+**Respuesta de ThingsBoard (2026-10-26):** es un **fallo conocido**. La corrección está publicada en **4.4.0.1** (2026-10-22) y llegará a la rama 4.3 en **4.3.1.8** (aún no publicada; "probablemente mañana"). **No hay workaround por configuración**; recomiendan **vigilar ese endpoint** (`/api/plugins/telemetry/{entityType}/{entityId}/values/timeseries` con `startTs`) mientras tanto. Se confirma así la causa probable del PR #16134.
+
+**Decisión (Erick, 2026-10-26):** actualizar **4.3.0PE → 4.3.1.8PE** en cuanto se publique (también trae las correcciones de seguridad de 4.3.1.x). No se sube a 4.4.x. Runbook: UPG-01 (`docs/qa/2026-10-26-UPG-01-upgrade-4.3.1.8.md`). Según la guía oficial, de 4.3.x a 4.3.1.x **no** se ejecuta el script de upgrade; el riesgo principal es Angular 20 (desde 4.3.1) para el CSS y los widgets propios.
 
 **Escritura de atributos (riesgo descrito en el PR #16134):** Erick probó con el usuario de GONEX QA escribir un atributo en QA-Ajeno (activo del tenant). Resultado: **pendiente de registrar** (código de respuesta y si el atributo quedó escrito). Limpieza: **pendiente de registrar** (código).
 
@@ -51,7 +55,7 @@ Con la sesión de `curl` del guion de V17 (§0), sin navegador:
 
 | # | Opción | Efecto | Riesgo | Rollback |
 |---|---|---|---|---|
-| M1 | **Actualizar ThingsBoard** a una versión con la corrección | Cierra la causa | Hoy **no hay versión publicada** con la corrección (PR abierto). Una actualización de versión mayor es un proyecto aparte | Restaurar la versión anterior (copia de seguridad previa obligatoria) |
+| M1 | **Actualizar ThingsBoard** a una versión con la corrección | Cierra la causa | Corrección en 4.4.0.1 (publicada) y en 4.3.1.8 (por publicar), según ThingsBoard (2026-10-26). **Elegida: 4.3.1.8PE** (UPG-01) | Restaurar la base de datos del backup previo y volver a la imagen `4.3.0PE` (UPG-01 §7) |
 | M2 | **Reporte a ThingsBoard** (soporte PE / canal de seguridad) y seguimiento del PR #16134 | Obtener confirmación, plazo y, si existe, parche o hotfix para PE 4.3 | Ninguno | — |
 | M3 | **Filtro en el proxy** (`gonex-infra`) para las peticiones de historial de usuarios de customer, permitiendo solo los dispositivos de su customer | Cierra la exposición sin esperar a ThingsBoard | Alto: requiere leer el token en el proxy y mantener una lista de dispositivos por customer; un error rompe los dashboards de los clientes. Debe diseñarse y probarse aparte, primero con QA | Quitar la regla del proxy |
 | M4 | **Quitar los UUID ajenos del JS servido** (aplicar B-08 en Flota y Exportación de producción) | Reduce quién los conoce | No cierra la causa (los UUID ya se distribuyeron y no se pueden cambiar sin perder histórico). B-08 está bloqueado hasta cerrar SEC-02 | Rollback de B-08 |
@@ -59,6 +63,7 @@ Con la sesión de `curl` del guion de V17 (§0), sin navegador:
 | M6 | **Informar a Sunkuu (Romel)** del hallazgo, la exposición y el plan | Transparencia con el cliente del SaaS | — | — |
 
 Recomendación: M5 y M2 ya; M6 en cuanto haya confirmación de alcance (§4); M3 solo si ThingsBoard no da plazo; M4 cuando se levante el bloqueo de B-08.
+**Actualización (2026-10-26):** M2 hecho (respuesta en §2); M1 decidido con 4.3.1.8PE (UPG-01). M3 no se activa: el plazo es corto. M5 se mantiene hasta pasar la prueba de UPG-01 §6.3.
 
 ## 6. Borrador de reporte para ThingsBoard (sin datos sensibles)
 
@@ -83,6 +88,7 @@ Antes de enviarlo: versión exacta (§4.1) y confirmación del alcance (§4.3).
 ## 7. Estado y bloqueos
 
 - **B-06 desbloqueado solo para DEV** (Erick, 2026-10-26): toca solo la copia DEV y quita los UUID de producción de su JS; el fallo no depende del registro. En su guion, F16 y toda prueba que espere 403 en el historial de un dispositivo ajeno pasan a "conocido por SEC-02" (solo el último valor debe dar 403). Su §5.4 con datos reales se mantiene.
+- **Cierre previsto:** UPG-01 aplicado y su prueba `curl` (§6.3: historial y último valor ajenos → 403; dispositivo propio → 200) en verde.
 - **B-08 bloqueado** hasta cerrar SEC-02.
 - **Apu Samay sin usuarios** hasta cerrar SEC-02.
 - Las pruebas con el registro apuntado a dispositivos de producción quedan suspendidas, salvo la §5.4 de B-06 (decisión de Erick, 2026-10-26).
@@ -97,11 +103,15 @@ Antes de enviarlo: versión exacta (§4.1) y confirmación del alcance (§4.3).
 | 4.1 Versión | Pendiente | |
 | 4.2 Permisos y auditoría | Pendiente | |
 | 4.3 Alcance | Pendiente | |
-| Reporte a ThingsBoard | ✔ contact-us (acuse "respuesta en 24 h") y ✔ security@thingsboard.io (2026-10-26) | Evidencia sin UUID ni datos de clientes; `evidence.txt` eliminado (nunca versionado). Texto pendiente de copiar en §2. Esperando respuesta |
+| Reporte a ThingsBoard | ✔ contact-us (acuse "respuesta en 24 h") y ✔ security@thingsboard.io (2026-10-26) | Evidencia sin UUID ni datos de clientes; `evidence.txt` eliminado (nunca versionado). Texto pendiente de copiar en §2 |
+| Respuesta de ThingsBoard (2026-10-26) | ✔ Fallo conocido | Corregido en 4.4.0.1 (22-oct); llega en 4.3.1.8 (no publicada). Sin workaround de configuración; vigilar el endpoint. §2 |
 | Aviso a Sunkuu | Pendiente | |
-| §9 Decisión upgrade / parche | Pendiente (2026-10-27) | |
+| §9 Decisión upgrade / parche | ✔ Decidido (Erick, 2026-10-26) | 4.3.0PE → **4.3.1.8PE** cuando se publique (opción B de §9, con la respuesta de ThingsBoard). Runbook UPG-01 |
+| UPG-01 aplicado y prueba de §6.3 | Pendiente | Cierra SEC-02 |
 
 ## 9. Evaluación para mañana: upgrade a 4.4.x o esperar un parche de 4.3 PE
+
+**Resuelta (2026-10-26):** opción B, con la respuesta de ThingsBoard (§2): 4.3.1.8PE. El ensayo, el backup y el rollback de la opción A se trasladan a UPG-01. Lo que sigue queda como registro de la evaluación.
 
 Solo evaluación; nada se aplica. Los datos marcados "verificar" se confirman mañana en las fuentes oficiales.
 

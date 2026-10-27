@@ -1,6 +1,6 @@
 # SEC-03 — Mosquitto expuesto a internet sin autenticación
 
-Fecha: 2026-10-26 · Base: `../sunkuu-tb-config` `8a1f930` y `../gonex-infra` `2cf8302` (solo lectura) · **Abierto. Nada aplicado.**
+Fecha: 2026-10-26 · Base: `../sunkuu-tb-config` `8a1f930` y `../gonex-infra` `2cf8302` (solo lectura) · **Abierto: M1 y M2 aplicados (A-01); M3 y M4 sin decidir.**
 Origen: análisis de la Opción A (`docs/arquitectura/2026-10-26-opcion-A-proem.md` §6).
 
 ## 1. Hallazgo (lectura de configuración, sin pruebas en vivo)
@@ -21,6 +21,7 @@ Origen: análisis de la Opción A (`docs/arquitectura/2026-10-26-opcion-A-proem.
 1. **Crear dispositivos:** quien publique `<cualquier nombre>/status/em:0` o `…/em1:0` crea un dispositivo del tenant y gasta cupo de licencia (100). Con prefijo, solo se pueden crear nombres que lo cumplan.
 2. **Inyectar telemetría** en dispositivos existentes, conociendo su nombre (`shellypro3em-<mac>`). Los dashboards, los informes y el costo mostrarían datos falsos.
 3. **Leer en tiempo real** la telemetría de todos los equipos, suscribiéndose a `#`. Sin ACL, Mosquitto lo permite a cualquier cliente anónimo. Es una exposición de confidencialidad entre customers y frente a terceros, independiente de SEC-02.
+4. **Mandar comandos a los Shelly** (añadido el 2026-10-26, al preparar A-02; por deducción, no probado): los Shelly Gen2 con MQTT aceptan RPC en `<prefijo>/rpc` (y comandos en `<prefijo>/command` si "Control MQTT" está activado). Con el broker anónimo, quien conozca el prefijo (`shellypro3em-<mac>`, o leyéndolo con `#`) podría reiniciar o reconfigurar el equipo. Mitigación inmediata por equipo: desactivar en la app Shelly las opciones de RPC/Control por MQTT si el firmware las ofrece (A-02 §1 lo comprueba en Hab. 105); revisar los 4 Pro 3EM y el Plus 1 en la próxima visita o por Shelly Cloud. M3 lo cubre del todo.
 
 ## 3. Mitigación
 
@@ -28,7 +29,7 @@ Origen: análisis de la Opción A (`docs/arquitectura/2026-10-26-opcion-A-proem.
 |---|---|---|---|
 | M1 | **Filtro `shellyproem50-` en el converter Pro EM50** (igual que Plus 1: `return null` si no coincide) | Impacto 1, solo para la integración Pro EM50 | **Decidido (Erick, 2026-10-26)**. Va como A-01, antes de conectar Hab. 105 |
 | M2 | El mismo filtro en el converter Pro 3EM (`shellypro3em-`) | Impacto 1 para el 3EM | **Decidido (Erick, 2026-10-26)**, con rollback. Va en A-01. Los 4 nombres actuales cumplen el prefijo |
-| M3 | Autenticación en Mosquitto (`password_file`, `allow_anonymous false`) y ACL por usuario (lectura de `#` solo para ThingsBoard) | Impactos 1, 2 y 3 | **Se evalúa aparte** (decisión de Erick). Requiere usuario y contraseña en cada Shelly en campo (visita o Shelly Cloud) y en las 5 integraciones. Coordinar con Romel |
+| M3 | Autenticación en Mosquitto (`password_file`, `allow_anonymous false`) y ACL por usuario (lectura de `#` solo para ThingsBoard) | Impactos 1, 2, 3 y 4 | **Se evalúa aparte** (decisión de Erick). Requiere usuario y contraseña en cada Shelly en campo (visita o Shelly Cloud) y en las 5 integraciones. Coordinar con Romel |
 | M4 | TLS en el listener | Credenciales y datos en tránsito | Con M3 |
 
 ## 4. Resultados
@@ -36,5 +37,5 @@ Origen: análisis de la Opción A (`docs/arquitectura/2026-10-26-opcion-A-proem.
 | Paso | Resultado | Notas |
 |---|---|---|
 | Hallazgo | Registrado (lectura de configuración) | §1 |
-| M1 y M2 | Preparados en A-01 (`docs/qa/2026-10-26-A-01.md`), no aplicados | |
+| M1 y M2 | ✔ Aplicados con A-01 (Erick, 2026-10-26): `a854fad` (Pro EM50) y `85a9623` (Pro 3EM) | `verificar` ✔; los 3 medidores reales siguieron actualizando |
 | M3 | Pendiente de evaluación | |
