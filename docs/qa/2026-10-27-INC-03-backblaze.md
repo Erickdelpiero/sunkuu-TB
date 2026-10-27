@@ -26,7 +26,7 @@ Infraestructura: `../gonex-infra` (`backup.sh`; solo lectura). Relacionado: UPG-
 
 ## 4. Mitigación de la noche del 26 al 27
 
-- Borrado manual de `postgres/thingsboard_2026-10-19_04-11-28.sql.gz` (~1 GB) para que el backup del 27 quepa: **por confirmar** (el mensaje de cierre quedó con "<hice / no hice>" sin completar). Si no se hizo, el backup del 27 (02:00 de Lima) puede fallar al subir.
+- Borrado manual de `postgres/thingsboard_2026-10-19_04-11-28.sql.gz` (~1 GB) para que el backup del 27 quepa: **hecho** (Erick, noche del 26; confirmado el 2026-10-27). §5 comprueba que el backup del 27 subió.
 
 ## 5. Verificación (2026-10-27, antes de nada más)
 
@@ -53,10 +53,17 @@ Si la subida falló: hacer primero los pasos 1–2 de §3 y repetir a mano con `
 
 | Paso | Estado | Nota |
 |---|---|---|
-| Borrado manual de `thingsboard_2026-10-19_04-11-28.sql.gz` (noche del 26) | Por confirmar | |
+| Borrado manual de `thingsboard_2026-10-19_04-11-28.sql.gz` (noche del 26) | ✔ Erick | Confirmado el 2026-10-27 |
 | §5 backup del 27 subido | Pendiente | |
 | 1. Tarjeta agregada | Pendiente | |
 | 2. Caps Storage y Download en USD 1/día | Pendiente | |
 | 3. Regla de ciclo de vida `postgres/` (ocultar 30 d, borrar 1 d) | Pendiente | |
 | 4. Corregir en `gonex-infra` (lo hace Erick): `RETENTION_DIAS` y el comentario "Eliminar backups antiguos en B2" de `backup.sh` no borran nada; la retención la hace la regla del paso 3 | Pendiente | |
 | Cierre: UPG-01 §3.0 y runbook §2 en ✔ | Pendiente | |
+
+## 7. Decisión del 2026-10-27 (Erick): sin tarjeta, dentro del plan gratuito
+
+**Reemplaza al plan de §3** (tarjeta, caps en USD 1/día y ciclo de vida a 30 días): **no se paga**. Objetivo: quedar dentro del plan gratuito, **10 GB de almacenamiento y 1 GB/día de descarga**.
+- Hoy (Erick, en la web de Backblaze): borrar a mano los backups del 19 y del 20-oct y crear la regla de ciclo de vida personalizada en `postgres/`: **ocultar a los 6 días** de subido y **borrar 1 día después** → ~7 días de historial (~7,4 GB con el tamaño actual).
+- Después (en `gonex-infra`, lo aplica Erick): compresión `zstd` (o `xz`) en `backup.sh` en lugar de `gzip`, para que el dump de `thingsboard` baje de 1 GB y una restauración completa entre en el tope diario de descarga; medición previa en el VPS, `RETENTION_DIAS`, runbook de recuperación y esta nota: **por preparar** (Claude).
+- UPG-01 deja de depender de INC-03: su requisito pasa a ser que el backup del 27 esté en B2 (UPG-01 §3.0), sin descargar nada de B2 el día del upgrade.

@@ -1,6 +1,6 @@
 # SEC-02 — Historial de telemetría legible entre customers
 
-Fecha: 2026-10-26 · Base: `../sunkuu-tb-config` `8a1f930` (solo lectura) · **Abierto. Nada aplicado.** ThingsBoard confirmó el fallo (2026-10-26); se cierra con el upgrade a 4.3.1.8 PE (UPG-01, `docs/qa/2026-10-26-UPG-01-upgrade-4.3.1.8.md`).
+Fecha: 2026-10-26 · Base: `../sunkuu-tb-config` `8a1f930` (solo lectura) · **CERRADO el 2026-10-27** con el upgrade a 4.3.1.8PE (UPG-01, `docs/qa/2026-10-26-UPG-01-upgrade-4.3.1.8.md`): antes, ajenos `403 200 200`; después, ajenos `403 403 403` y propio `200 200 200`. ThingsBoard había confirmado el fallo el 2026-10-26.
 Origen: V17 de B-05 (`docs/qa/2026-10-25-B-05.md` §9) y su investigación (`docs/qa/2026-10-26-V17-permisos-curl.md`).
 
 ## 1. Hallazgo (verificado por Erick el 2026-10-26)
@@ -89,9 +89,10 @@ Antes de enviarlo: versión exacta (§4.1) y confirmación del alcance (§4.3).
 
 - **B-06 desbloqueado solo para DEV** (Erick, 2026-10-26): toca solo la copia DEV y quita los UUID de producción de su JS; el fallo no depende del registro. En su guion, F16 y toda prueba que espere 403 en el historial de un dispositivo ajeno pasan a "conocido por SEC-02" (solo el último valor debe dar 403). Su §5.4 con datos reales se mantiene.
 - **Cierre previsto:** UPG-01 aplicado y su prueba `curl` (§6.3: historial y último valor ajenos → 403; dispositivo propio → 200) en verde.
-- **B-08 bloqueado** hasta cerrar SEC-02.
-- **Apu Samay sin usuarios** hasta cerrar SEC-02.
-- Las pruebas con el registro apuntado a dispositivos de producción quedan suspendidas, salvo la §5.4 de B-06 (decisión de Erick, 2026-10-26).
+- ~~**B-08 bloqueado** hasta cerrar SEC-02.~~ **Desbloqueado** (Erick, 2026-10-27, tras UPG-01).
+- ~~**Apu Samay sin usuarios** hasta cerrar SEC-02.~~ **Desbloqueado** (Erick, 2026-10-27): ya se pueden crear sus usuarios.
+- ~~Las pruebas con el registro apuntado a dispositivos de producción quedan suspendidas, salvo la §5.4 de B-06.~~ Levantado con el cierre (2026-10-27).
+- Sigue vigente lo de §3: el JS de Flota y Exportación de producción contiene los UUID de todos los medidores. Con SEC-02 cerrado ya no da acceso al historial; se quita con B-08 (registro).
 
 ## 8. Resultados
 
@@ -107,7 +108,7 @@ Antes de enviarlo: versión exacta (§4.1) y confirmación del alcance (§4.3).
 | Respuesta de ThingsBoard (2026-10-26) | ✔ Fallo conocido | Corregido en 4.4.0.1 (22-oct); llega en 4.3.1.8 (no publicada). Sin workaround de configuración; vigilar el endpoint. §2 |
 | Aviso a Sunkuu | Pendiente | |
 | §9 Decisión upgrade / parche | ✔ Decidido (Erick, 2026-10-26) | 4.3.0PE → **4.3.1.8PE** cuando se publique (opción B de §9, con la respuesta de ThingsBoard). Runbook UPG-01 |
-| UPG-01 aplicado y prueba de §6.3 | Pendiente | Cierra SEC-02 |
+| UPG-01 aplicado y prueba de §6.3 | ✔ Erick, 2026-10-27 | 4.3.1.8PE. Ajenos (TG GOCTA, Tucán, Pumarinri) `403 403 403`; propio (QA `99eae720`) `200 200 200`. **SEC-02 cerrado.** Quedan sin registrar: la prueba de escritura de atributo y 4.1–4.3 (ya no bloquean) |
 
 ## 9. Evaluación para mañana: upgrade a 4.4.x o esperar un parche de 4.3 PE
 

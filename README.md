@@ -6,7 +6,7 @@ Desarrollado por GONEX S.A.C. — Propuesta Gonex-2026-0302.
 ## Proyecto
 - **Cliente:** Sunkuu Energy S.A.C. — Ing. Romel Valqui
 - **Proveedor:** GONEX S.A.C. — Ing. Erick Del Piero Gonzales
-- **Plataforma:** ThingsBoard Professional Edition 4.3.0PE
+- **Plataforma:** ThingsBoard Professional Edition 4.3.1.8PE (desde UPG-01, 2026-10-27)
 - **Instancia admin GONEX:** https://thingsboard.gonex.pe
 - **Instancia cliente Sunkuu:** https://360.sunkuu.com
 - **Inicio:** Marzo 2026

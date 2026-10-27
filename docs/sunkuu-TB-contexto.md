@@ -16,8 +16,8 @@ de marca blanca bajo la identidad de Sunkuu (360.sunkuu.com).
 ### Docker sobre instalación nativa
 Todo el stack de GONEX corre en Docker. ThingsBoard PE se integró como dos contenedores
 al `docker-compose.yml` existente:
-- `gonex-thingsboard` — plataforma principal (imagen `tb-pe-node:4.3.0PE`)
-- `gonex-tb-web-report` — generador de reportes PDF (imagen `tb-pe-web-report:4.3.0PE`)
+- `gonex-thingsboard` — plataforma principal (imagen `tb-pe-node:4.3.1.8PE` desde UPG-01, 2026-10-27)
+- `gonex-tb-web-report` — generador de reportes PDF (imagen `tb-pe-web-report:4.3.1.8PE` desde UPG-01, 2026-10-27)
 
 ### PostgreSQL compartido
 ThingsBoard usa la instancia PostgreSQL existente del stack GONEX (`gonex-postgres`),
