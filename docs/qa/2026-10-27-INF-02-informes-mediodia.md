@@ -1,6 +1,6 @@
 # INF-02 — Informes mensuales: Erick como destinatario, envío a las 12:00 de Lima y monitor de n8n a las 13:00
 
-Fecha: 2026-10-27 · Base: `../sunkuu-tb-config` `85a9623` (solo lectura) · **Preparado, no aplicado.** Se aplica el **2026-10-28**, después de UPG-01.
+Fecha: 2026-10-27 · Base: `../sunkuu-tb-config` `85a9623` (solo lectura) · **Aplicado ✔ (Erick, 2026-10-27, adelantado al 27).** Sin target nuevo (§1.2). Resultados en §7.
 Tipo: **por confirmar por Erick** (propuesta: Cortesía, 1 h e: el destinatario es para el control de GONEX y la hora la pide GONEX).
 Relacionado: INF-01 (`CHANGELOG.md`), `config/informes/README.md` (destinatarios, fuera del Version Control), UPG-01 §2 y §6.6.
 
@@ -102,6 +102,7 @@ docker logs gonex-tb-web-report --since 15m 2>&1 | grep -E 'Dashboard report gen
 - **2026-11-01 12:00–12:15:** llegan los 4 correos (o 8 si quedaste en dos targets, ver §1.2) con el PDF; los clientes y Romel, como siempre.
 - **2026-11-01 13:00:** si todo salió bien, el monitor no envía nada a Telegram. Si alerta, `docker logs gonex-tb-web-report --since 2h` y avísame.
 - `config/informes/README.md`: lo actualizo cuando confirmes §3 (tabla de destinatarios con `GONEX — Erick`, hora 12:00 y el monitor de n8n). `CHANGELOG.md`: fila INF-02 con los hashes de §3.5.
+- Pendiente menor: quitar los datos fijados (*pin*) de los nodos del workflow de n8n.
 
 ## 6. Rollback
 
@@ -113,3 +114,14 @@ git -C ../sunkuu-tb-config pull && python3 -I widgets/work/INF-02/verificar.py r
 2. **Target:** si se elimina `GONEX — Erick` (opcional: sin eventos que lo usen no envía nada), versión manual **Overwrite, todos los tipos** (las bajas no se registran solas).
 3. **n8n:** expresión de vuelta a `30 8 1 * *` y nombre "Cron Mensual 8:30am", o importar `monitor-reporte-mensual-pre-INF-02.json` de §1.4 sobre el mismo workflow. Comprobar que queda Active.
 4. Si el rollback se hace el día 1 entre las 08:00 y las 12:00, los informes de ese mes ya no salen ese día (la hora de las 08:00 ya pasó): generar a mano con un evento de una sola vez como el de §3.6, con los destinatarios de los 4 eventos.
+
+## 7. Resultados (Erick, 2026-10-27)
+
+| Paso | Resultado | Hash / notas |
+|---|---|---|
+| 1.1 base | ✔ | Desde `85a9623` solo la baseline de UPG-01 (`2a36495`); `verificar.py antes` en `7be153c`: OK (Claude) |
+| 1.2 usuario | ✔ | El usuario GONEX ya está en "Tenant Administrators": **no se crea el target "GONEX — Erick"** (sin correos duplicados). §2 no aplica |
+| 3 eventos a las 12:00 Lima, día 1 | ✔ | `446d484` (versión manual: los 4 `scheduler_event` y actividad de 7 dispositivos). `verificar.py despues` ✔ (los 4 en `1780333200000`); su aviso "ningún notification_target nuevo" es lo esperado sin §2 |
+| 3.6 prueba de entrega | ✔ | Evento temporal con target temporal "PRUEBA INF-02" (solo el usuario de Erick): correo con `report-2026-10-27_19:52:15.pdf` (379 KB) recibido a las 19:52 Lima. Primer informe generado con 4.3.1.8PE. Evento y target de prueba eliminados; **versión de baja: hash por registrar** |
+| 4 n8n | ✔ | Nodo "Cron Mensual 13:00" (`0 13 1 * *`), zona America/Lima confirmada, publicado. §4.4 (`workflow.json` del repo): pendiente, sin el `chatId`. Pendiente menor: quitar los datos fijados (*pin*) de los nodos |
+| 5 primer envío real | Pendiente | 2026-11-01: 4 correos entre 12:00 y 12:15; monitor a las 13:00 sin alerta |

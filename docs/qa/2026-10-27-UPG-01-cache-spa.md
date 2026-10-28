@@ -1,6 +1,6 @@
 # UPG-01 · Hallazgo §6.11 — Index viejo de ThingsBoard en caché del navegador (Nginx: `no-cache` para la SPA)
 
-Fecha: 2026-10-27 · Base: `../gonex-infra` `faf92be` (solo lectura) · **Preparado, no aplicado.** Lo aplica y commitea Erick en `gonex-infra`.
+Fecha: 2026-10-27 · Base: `../gonex-infra` `faf92be` (solo lectura) · **Cerrado como "no aplica" (Erick, 2026-10-27):** el paso 0 mostró que ThingsBoard ya manda `no-cache` en el index; Nginx y `gonex-infra` sin cambios. Resultado en §7.
 Origen: UPG-01 (4.3.0PE → 4.3.1.8PE). Tipo: Correctivo (infraestructura de GONEX), dentro de UPG-01.
 
 ## 1. Hallazgo (Erick, 2026-10-27)
@@ -9,7 +9,7 @@ Origen: UPG-01 (4.3.0PE → 4.3.1.8PE). Tipo: Correctivo (infraestructura de GON
 - "Clear site data" no lo resolvió. En Firefox funciona.
 - **Riesgo:** Romel y los usuarios de los customers pueden tener la misma caché vieja en Chromium y ver la plataforma rota, o en blanco, hasta que su navegador revalide el index.
 
-## 2. Causa probable (a confirmar con §4, paso 0)
+## 2. Causa probable (a confirmar con §4, paso 0) — **descartada por el paso 0** (ver §7)
 
 Los dos vhosts (`nginx/360.sunkuu.com.conf` y `nginx/thingsboard.gonex.pe.conf`) solo hacen `proxy_pass` a `localhost:9090` y no definen cabeceras de caché: Nginx reenvía lo que mande ThingsBoard. Si el index y las rutas de la SPA llegan **sin `Cache-Control`** pero con `Last-Modified`, el navegador aplica **caché heurística**: lo da por fresco durante ~10 % de su antigüedad (días, si el index se compiló hace semanas) y no pregunta al servidor. Los bundles cambian de nombre en cada versión (hash), pero el index que los nombra no.
 
@@ -110,8 +110,10 @@ sudo cp -p ~/upg01/nginx-pre-cache/360.sunkuu.com ~/upg01/nginx-pre-cache/things
 
 | Paso | Resultado | Notas |
 |---|---|---|
-| 0 medición antes | Pendiente | Cache-Control del index: · bundle actual: |
-| 1 archivos activos = repo | Pendiente | rutas: |
-| 2–4 instalación y reload | Pendiente | |
-| 5 medición después | Pendiente | |
-| 6 navegador (Chromium, WebSocket, login) | Pendiente | |
+| 0 medición antes | ✔ Erick, 2026-10-27 | ThingsBoard ya envía `Cache-Control: no-cache, no-store, max-age=0, must-revalidate` y `Expires: 0` en `/`, `/home`, `/widget-editor` e `/index.html`. La causa de §2 queda descartada: **no se sigue** (como indica el paso 0) |
+| 1 archivos activos = repo | No aplica | |
+| 2–4 instalación y reload | No aplica | Nginx sin cambios |
+| 5 medición después | No aplica | |
+| 6 navegador (Chromium, WebSocket, login) | No aplica | |
+
+**Conclusión:** el index viejo venía de la caché local de ese Chromium (no de la caché heurística ni de Nginx); se resolvió borrando "Imágenes y archivos en caché" del navegador, y desde entonces Chromium funciona (B-08 se aplicó desde él). Para usuarios que lo vean tras un upgrade: Ctrl+Shift+R. Los archivos de `widgets/work/UPG-01/nginx/` y `nginx-cache-spa.diff` quedan sin uso.
