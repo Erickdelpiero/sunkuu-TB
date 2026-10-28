@@ -142,6 +142,12 @@ Solo cambió `controllerScript`; el HTML y el CSS quedaron iguales [Repo: `diff`
 | 6. Arrays en 4 widgets | Flota (2 arrays), 3EM (1), Piscina (1), Exportación (3) | ≈ 33 campos, ≈ 30 líneas y 10 UUIDs | Olvido de bajas ✱ (×3), olvido de un mapa ✱ (`DASH_TO_INST`), copiar y pegar letra y color ✱, error de sintaxis que tumba el widget para **todos** los clientes (riesgo, no observado) |
 | 7. Verificación en incógnito | Iniciar sesión como cliente | — | Solo detecta lo visible para ese cliente. No detecta los efectos sobre **otros** clientes (A3-1 lo sufre Gocta, no Pumarinri) |
 
+**Procedimiento de alta vigente desde B-08 (2026-10-27, `7be153c`).** Los pasos 1–5 y 7 no cambian. El **paso 6** pasa a ser **"Registrar la instalación en Administración"**:
+- Flota → botón "Administración" (solo el usuario del tenant) → nueva instalación: customer, tipo, dashboard, dispositivos por rol (y nombres de canal en el Pro EM), etiqueta, ubicación, orden; "Validar" sin bloqueos → "Guardar" → "Guardado y releído". El formulario muestra el cupo de activos de la licencia.
+- Etiqueta con mayúsculas y minúsculas aunque el título del dashboard esté en mayúsculas ("TG Gocta", no "TG GOCTA"); el activo queda `INST · <etiqueta>`. Atributos solo con el formulario o por API, nunca a mano en la UI (CLAUDE.md).
+- Versión manual **Overwrite, todos los tipos** (es un alta) y `node widgets/work/B-08/_build/validar_registro.js <hash>` (hoy espera exactamente las 4 reales de B-08; se amplía con cada alta, empezando por Hab. 105 en A-06).
+- Flota y Exportación leen el registro: ya no se editan sus arrays. **Siguen a mano hasta FIX-02:** el NAV de los templates 3EM y Piscina (un array cada uno). El paso 6 deja de existir del todo con FIX-02.
+
 ### A.5 Reestructuración de Pumarinri: verificación
 
 #### A.5.1 ¿El auto-commit registra eliminaciones?
